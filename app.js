@@ -98,7 +98,7 @@ app.post('/webhook/', function (req, res) {
                     console.log(JSON.stringify(doc));
                     switch(doc.step) {
                         case 1:
-                            col.update({id:sender, step:2}, function(err, r) {
+                            col.updateOne({id:sender},{ $set: { step : 2 } }, function(err, r) {
                                 if (event.postback && event.postback.payload) {
                                     sendTextMessage(sender, "Where are you?");
                                 }
@@ -106,7 +106,7 @@ app.post('/webhook/', function (req, res) {
                             break;
                         case 2:
                             
-                            col.update({id:sender, step:3}, function(err, r) {
+                            col.updateOne({id:sender},{ $set: { step : 3 } }, function(err, r) {
                                 if (event.message && event.message.text) {
                                   sendTransitButtonMessage(sender);
                                 }
