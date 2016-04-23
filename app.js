@@ -116,6 +116,13 @@ app.post('/webhook/', function (req, res) {
                                 }
                             });
                             break;
+                        case 3:
+                          col.updateOne({id:sender},{ $set: { step : 3 } }, function(err, r) {
+                                if (event.postback && event.postback.payload) {
+                                    sendTextMessage(sender, "Sending you parks");
+                                }
+                            });
+                            break;
                         default:
                             sendIntialMessage(sender);
                     }
