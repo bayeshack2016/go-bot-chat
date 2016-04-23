@@ -99,12 +99,16 @@ app.post('/webhook/', function (req, res) {
                         case 1:
                             col.insertOne({id:sender, step:2}, function(err, r) {
                                 if (event.postback && event.postback.payload) {
-                                    sendTextMessage(sender, event.postback.payload);
+                                    sendTextMessage(sender, "Where are you?");
                                 }
                             });
                             break;
                         case 2:
-                            //code block
+                            col.insertOne({id:sender, step:3}, function(err, r) {
+                                if (event.message && event.message.text) {
+                                  sendTransitButtonMessage(sender);
+                                }
+                            });
                             break;
                         default:
                             sendIntialMessage(sender);
@@ -113,7 +117,7 @@ app.post('/webhook/', function (req, res) {
                     if (event.message && event.message.text) {
                         col.insertOne({id:sender, step:1}, function(err, r) {
                             if (event.message && event.message.text) {
-                                sendIntialMessage(sender);
+                                sendActivityButtonMessage(sender);
                             }
                         });
                     }
