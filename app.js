@@ -79,7 +79,8 @@ app.post('/webhook/', function (req, res) {
                     switch(doc.step) {
                         case 1:
                             col.insertOne({id:sender, step:2}, function(err, r) {
-                                sendTextMessage(sender, event.postback.payload);
+                               // sendTextMessage(sender, event.postback.payload);
+                               sendTextMessage(sender, 'step 2');
                             });
                             break;
                         case 2:
