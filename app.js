@@ -70,7 +70,7 @@ app.get('/webhook/', function (req, res) {
 app.post('/webhook/', function (req, res) {
     messaging_events = req.body.entry[0].messaging
     for (i = 0; i < messaging_events.length; i++) {
-        event = req.body.entry[0].messaging[0]
+        event = req.body.entry[0].messaging[i]
         sender = event.sender.id
         MongoClient.connect('mongodb://db_user:password@ds019101.mlab.com:19101/heroku_4kgl924v', function(err, db) {
             var col = db.collection('sessions');
@@ -79,8 +79,9 @@ app.post('/webhook/', function (req, res) {
                     switch(doc.step) {
                         case 1:
                             col.insertOne({id:sender, step:2}, function(err, r) {
-                               // sendTextMessage(sender, event.postback.payload);
-                               sendTextMessage(sender, 'step 2');
+                                if (event.postback && event.postback.payload) {
+                                    sendTextMessage(sender, event.postback.payload);
+                                }
                             });
                             break;
                         case 2:
@@ -92,7 +93,9 @@ app.post('/webhook/', function (req, res) {
                 } else {
                     if (event.message && event.message.text) {
                         col.insertOne({id:sender, step:1}, function(err, r) {
-                            sendIntialMessage(sender);
+                            if (event.message && event.message.text) {
+                                sendIntialMessage(sender);
+                            }
                         });
                     }
                 }
