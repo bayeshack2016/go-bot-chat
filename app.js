@@ -26,6 +26,10 @@ var MongoClient = require('mongodb').MongoClient;
 //API
 var API_URL = 'https://go-bot-api.herokuapp.com/';
 
+//Weather
+var WEATHER_API_KEY = '16acf95c142f6e5cc451e78523aa78b9';
+var WEATHER_API_URL = 'https://api.forecast.io/forecast/';
+
 app.get('/', function(req, res){
     res.send('Go Bot');
 });
@@ -49,6 +53,21 @@ app.get('/clear', function(req, res) {
     res.send('clear');
   });
 });
+
+app.get('/weather', function(req, res) {
+  handleWeatherRequest(37.7751648,-122.3986424, function(data){
+    res.send(data);
+  });
+});
+
+
+function handleWeatherRequest(lat, lon, callback) {
+  request.get(WEATHER_API_URL + WEATHER_API_KEY + '/' + lat + ',' + lon, function(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      callback(body);
+    }
+  });
+}
 
 app.get('/api', function(req, res){
   request.get(API_URL, function (error, response, body) {
@@ -129,6 +148,50 @@ function sendTextMessage(sender, text) {
     })
 }
 
+function sendActivityButtonMessage(sender) {
+  var buttons = [
+    {
+      "type":"postback",
+      "title":"Biking",
+      "payload":"{'value': 'Biking', 'step': 'activity'}"
+    },
+    {
+      "type":"postback",
+      "title":"Hiking",
+      "payload":"{'value': 'Hiking', 'step': 'activity'}"
+    },
+    {
+      "type":"postback",
+      "title":"Swimming",
+      "payload":"{'value': 'Swimming', 'step': 'activity'}"
+    }
+  ];
+  
+  sendButtonMessage(sender, "What do you want to do?", buttons);
+}
+
+function sendTransitButtonMessage(sender) {
+  var buttons = [
+    {
+      "type": "postback",
+      "title": "Car",
+      "payload": "{'value': 'Car', 'step': 'transportation'}"
+    },
+    {
+      "type": "postback",
+      "title": "Transit",
+      "payload": "{'value': 'Transit', 'step': 'transportation'}"
+    },
+    {
+    "type": "postback",
+    "title": "Walk",
+    "payload": "{'value': 'Walk', 'step': 'transportation'}"
+    }
+  ];
+  
+  sendButtonMessage(sender, "How are you getting there?", buttons);
+}
+
 function sendIntialMessage(sender) {
     messageData = {
         "attachment": {
@@ -154,6 +217,38 @@ function sendIntialMessage(sender) {
                   }
                 ]
           }
+        }
+    }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:PAGE_ACCESS_TOKEN},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+}
+
+function sendParksMessage(sender) {
+  
+}
+
+function sendButtonMessage(sender, text, buttons) {
+    messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type":"button",
+                "text":text,
+                "buttons":buttons
+            }
         }
     }
     request({
