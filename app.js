@@ -64,7 +64,7 @@ app.post('/webhook/', function (req, res) {
             text = event.message.text
             sendIntialMessage(sender);
         } else if (event.postback && event.postback.payload) {
-          res.send(JSON.stringify(event.postback.payload));
+          sendTextMessage(sender, JSON.stringify(event.postback.payload));
         }
     }
     res.sendStatus(200)
