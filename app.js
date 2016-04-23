@@ -46,6 +46,7 @@ app.get('/clear', function(req, res) {
     var col = db.collection('sessions');
     col.drop()
     db.close();
+    res.send('clear');
   });
 });
 
