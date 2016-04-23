@@ -62,7 +62,7 @@ app.post('/webhook/', function (req, res) {
         sender = event.sender.id
         if (event.message && event.message.text) {
             text = event.message.text
-            sendIntialMessage(sender);
+            sendTransitButtonMessage(sender);
         } else if (event.postback && event.postback.payload) {
           sendTextMessage(sender, event.postback.payload);
         }
@@ -92,6 +92,16 @@ function sendTextMessage(sender, text) {
     })
 }
 
+function sendTransitButtonMessage(sender) {
+  var buttons = [{
+    "type": "postback",
+    "title": "Car",
+    "payload": "{'value': 'Car'}"
+  }];
+  
+  sendButtonMessage(sender, "How are you getting there?", buttons);
+}
+
 function sendIntialMessage(sender) {
     messageData = {
         "attachment": {
@@ -117,6 +127,34 @@ function sendIntialMessage(sender) {
                   }
                 ]
           }
+        }
+    }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:PAGE_ACCESS_TOKEN},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+}
+
+function sendButtonMessage(sender, text, buttons) {
+    messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type":"button",
+                "text":text,
+                "buttons":buttons
+            }
         }
     }
     request({
