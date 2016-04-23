@@ -63,6 +63,8 @@ app.post('/webhook/', function (req, res) {
         if (event.message && event.message.text) {
             text = event.message.text
             sendIntialMessage(sender);
+        } else if (event.postback && event.postback.payload) {
+          res.send(JSON.stringify(event.postback.payload));
         }
     }
     res.sendStatus(200)
@@ -100,13 +102,13 @@ function sendIntialMessage(sender) {
                 "buttons":[
                   {
                     "type":"postback",
-                    "title":"Hiking",
-                    "payload":"Hiking"
+                    "title":"Biking",
+                    "payload":{"value": "Biking", "step": "Activity"}
                   },
                   {
                     "type":"postback",
-                    "title":"Biking",
-                    "payload":"Biking"
+                    "title":"Hiking",
+                    "payload":"Hiking"
                   },
                   {
                     "type":"postback",
