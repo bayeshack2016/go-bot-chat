@@ -75,28 +75,30 @@ app.post('/webhook/', function (req, res) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
         MongoClient.connect('mongodb://db_user:password@ds019101.mlab.com:19101/heroku_4kgl924v', function(err, db) {
-        var col = db.collection('sessions');
-        col.findOne({id:sender}, function(err, doc) {
-            if (doc) {
-                if (event.postback && event.postback.payload) {
-                    sendTextMessage(sender, event.postback.payload);
+            var col = db.collection('sessions');
+            col.findOne({id:sender}, function(err, doc) {
+                if (doc) {
+                    if (event.postback && event.postback.payload) {
+                        sendTextMessage(sender, event.postback.payload);
+                    }
+                    //   sendTextMessage(sender, event.postback.payload);
+                    // }
+                    // if (event.message && event.message.text) {
+                    //     text = event.message.text
+                    //     sendIntialMessage(sender);
+                    // } else if (event.postback && event.postback.payload) {
+                    //   sendTextMessage(sender, event.postback.payload);
+                    // }
+                } else {
+                    if (event.message && event.message.text) {
+                        col.insertOne({id:sender, step:1}, function(err, r) {
+                            sendIntialMessage(sender);
+                        });
+                    }
                 }
-                //   sendTextMessage(sender, event.postback.payload);
-                // }
-                // if (event.message && event.message.text) {
-                //     text = event.message.text
-                //     sendIntialMessage(sender);
-                // } else if (event.postback && event.postback.payload) {
-                //   sendTextMessage(sender, event.postback.payload);
-                // }
-            } else{
-                if (event.message && event.message.text) {
-                    col.insertOne({id:sender, step:1}, function(err, r) {
-                        sendIntialMessage(sender);
-                    });
-                }
-            }
-            db.close();
+                db.close();
+            });
+        
         });
     }
     res.sendStatus(200)
