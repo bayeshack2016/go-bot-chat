@@ -95,6 +95,7 @@ app.post('/webhook/', function (req, res) {
             var col = db.collection('sessions');
             col.findOne({id:sender}, function(err, doc) {
                 if (doc) {
+                    console.log(JSON.stringify(doc));
                     switch(doc.step) {
                         case 1:
                             col.insertOne({id:sender, step:2}, function(err, r) {
@@ -104,6 +105,7 @@ app.post('/webhook/', function (req, res) {
                             });
                             break;
                         case 2:
+                            
                             col.insertOne({id:sender, step:3}, function(err, r) {
                                 if (event.message && event.message.text) {
                                   sendTransitButtonMessage(sender);
