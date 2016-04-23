@@ -39,7 +39,11 @@ app.get('/db', function(req, res) {
 });
 
 app.get('/api', function(req, res){
-  
+  request.get(API_URL, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      res.send(body);
+    }
+  });
 });
 
 
