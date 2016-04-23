@@ -62,7 +62,7 @@ app.post('/webhook/', function (req, res) {
         sender = event.sender.id
         if (event.message && event.message.text) {
             text = event.message.text
-            sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
+            sendIntialMessage(sender);
         }
     }
     res.sendStatus(200)
@@ -90,36 +90,31 @@ function sendTextMessage(sender, text) {
     })
 }
 
-function sendGenericMessage(sender) {
+function sendIntialMessage(sender) {
     messageData = {
         "attachment": {
             "type": "template",
             "payload": {
-                "template_type": "generic",
-                "elements": [{
-                    "title": "First card",
-                    "subtitle": "Element #1 of an hscroll",
-                    "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
-                    "buttons": [{
-                        "type": "web_url",
-                        "url": "https://www.messenger.com",
-                        "title": "web url"
-                    }, {
-                        "type": "postback",
-                        "title": "Postback",
-                        "payload": "Payload for first element in a generic bubble",
-                    }],
-                }, {
-                    "title": "Second card",
-                    "subtitle": "Element #2 of an hscroll",
-                    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
-                    "buttons": [{
-                        "type": "postback",
-                        "title": "Postback",
-                        "payload": "Payload for second element in a generic bubble",
-                    }],
-                }]
-            }
+                "template_type":"button",
+                "text":"What do you want to do?",
+                "buttons":[
+                  {
+                    "type":"postback",
+                    "title":"Hiking",
+                    "payload":"Hiking"
+                  },
+                  {
+                    "type":"postback",
+                    "title":"Biking",
+                    "payload":"Biking"
+                  },
+                  {
+                    "type":"postback",
+                    "title":"Swimming",
+                    "payload":"Swimming"
+                  }
+                ]
+          }
         }
     }
     request({
