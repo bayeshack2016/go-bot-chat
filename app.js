@@ -91,7 +91,7 @@ app.post('/webhook/', function (req, res) {
     for (i = 0; i < messaging_events.length; i++) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
-        if (!event.message || !event.postback) {
+        if (!event.message && !event.postback) {
           res.sendStatus(200);
           return;
         }
