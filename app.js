@@ -33,8 +33,20 @@ app.get('/', function(req, res){
 app.get('/db', function(req, res) {
   
   MongoClient.connect('mongodb://db_user:password@ds019101.mlab.com:19101/heroku_4kgl924v', function(err, db) {
-    res.send("Connected correctly to server.");
+    var col = db.collection('sessions');
+    col.insertOne({id:1}, function(err, r) {
+        res.send("doc");
+      db.close();
+  });
+});
+});
+
+app.get('/clear', function(req, res) {
+  MongoClient.connect('mongodb://db_user:password@ds019101.mlab.com:19101/heroku_4kgl924v', function(err, db) {
+    var col = db.collection('sessions');
+    col.drop()
     db.close();
+    res.send('clear');
   });
 });
 
@@ -60,12 +72,37 @@ app.post('/webhook/', function (req, res) {
     for (i = 0; i < messaging_events.length; i++) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
-        if (event.message && event.message.text) {
-            text = event.message.text
-            sendTransitButtonMessage(sender);
-        } else if (event.postback && event.postback.payload) {
-          sendTextMessage(sender, event.postback.payload);
-        }
+        MongoClient.connect('mongodb://db_user:password@ds019101.mlab.com:19101/heroku_4kgl924v', function(err, db) {
+            var col = db.collection('sessions');
+            col.findOne({id:sender}, function(err, doc) {
+                if (doc) {
+                    switch(doc.step) {
+                        case 1:
+                            col.insertOne({id:sender, step:2}, function(err, r) {
+                                if (event.postback && event.postback.payload) {
+                                    sendTextMessage(sender, event.postback.payload);
+                                }
+                            });
+                            break;
+                        case 2:
+                            //code block
+                            break;
+                        default:
+                            sendIntialMessage(sender);
+                    }
+                } else {
+                    if (event.message && event.message.text) {
+                        col.insertOne({id:sender, step:1}, function(err, r) {
+                            if (event.message && event.message.text) {
+                                sendIntialMessage(sender);
+                            }
+                        });
+                    }
+                }
+                db.close();
+            });
+
+        });
     }
     res.sendStatus(200)
 });
@@ -90,16 +127,6 @@ function sendTextMessage(sender, text) {
             console.log('Error: ', response.body.error)
         }
     })
-}
-
-function sendTransitButtonMessage(sender) {
-  var buttons = [{
-    "type": "postback",
-    "title": "Car",
-    "payload": "{'value': 'Car'}"
-  }];
-  
-  sendButtonMessage(sender, "How are you getting there?", buttons);
 }
 
 function sendIntialMessage(sender) {
@@ -127,34 +154,6 @@ function sendIntialMessage(sender) {
                   }
                 ]
           }
-        }
-    }
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:PAGE_ACCESS_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
-}
-
-function sendButtonMessage(sender, text, buttons) {
-    messageData = {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type":"button",
-                "text":text,
-                "buttons":buttons
-            }
         }
     }
     request({
