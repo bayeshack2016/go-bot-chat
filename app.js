@@ -275,13 +275,18 @@ function sendParksMessage(sender, doc) {
         var obj = JSON.parse(body);
         
         console.log(obj);
-        var parks = [];
-        for (var i = 0; i < obj.recareas.length; i++) {
-          if (obj.recareas[i]) {
-            console.log(obj.recareas[i]);
-            parks.push({title: obj.recareas[i].name, image_url: obj.recareas[i].image, subtitle: (obj.recareas[i].travel_time + ' ' + obj.recareas[i].distance + '\r\n' + obj.recareas[i].weather.summary + ' ' + obj.recareas[i].weather.temperature), buttons: [{type: 'web_url', title: "Go!", url: 'http://google.com'},{type: 'web_url', title: "Share", url: 'http://google.com'},{type: "postback", title: "Bookmark Park", payload: obj.recareas[i].id}] });
-          }
+        
+        //we have no data
+        if (obj.recareas.length == 0) {
+          sendTextMessage(sender, "We couldn't find any parks that met your search criteria");
         }
+          var parks = [];
+          for (var i = 0; i < obj.recareas.length; i++) {
+            if (obj.recareas[i]) {
+              console.log(obj.recareas[i]);
+              parks.push({title: obj.recareas[i].name, image_url: obj.recareas[i].image, subtitle: (obj.recareas[i].travel_time + ' ' + obj.recareas[i].distance + '\r\n' + obj.recareas[i].weather.summary + ' ' + obj.recareas[i].weather.temperature), buttons: [{type: 'web_url', title: "Go!", url: 'http://google.com'},{type: 'web_url', title: "Share", url: 'http://google.com'},{type: "postback", title: "Bookmark Park", payload: obj.recareas[i].id}] });
+            }
+          }
         
         messageData = {
           "attachment":{
