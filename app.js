@@ -131,7 +131,10 @@ app.post('/webhook/', function (req, res) {
                         
                           col.updateOne({id:sender},{ $set: { step : 3, transit: event.postback.payload } }, function(err, r) {
                                 if (event.postback && event.postback.payload) {
-                                    sendParksMessage(sender);
+                                  
+                                  //get session obj
+                                  doc.transit = event.postback.payload;
+                                    sendParksMessage(sender, doc);
                                 }
                             });
                             break;
@@ -265,63 +268,22 @@ function sendIntialMessage(sender) {
     })
 }
 
-function sendParksMessage(sender) {
+function sendParksMessage(sender, doc) {
   
-  //request()
-  //https://go-bot-api.herokuapp.com/recommendations?activity_name=hiking&start_location=San%20Francisco&trans_mode=walking
-  //{ image: "url", name: "Some Park", id: 1213, distance: "200 miles", travel_time: "2:45", latitude: 123, longitude: 45}
-  
-  messageData = {
+  request('https://go-bot-api.herokuapp.com/recommendations?activity_name=' + doc.activity + '&start_location=' + doc.location + '&trans_mode=' + doc.transit, function(error, response, body){
+      if (!error && response.statusCode == 200) {
+        var obj = JSON.parse(body);
+        var parks = [];
+        for (var i = 0; i < obj.recareas.length; i++) {
+          parks.push({title: obj.recareas[i].name, image_url: obj.recareas[i].image, subtitle: obj.recareas[i].distance, buttons: [{type: "postback", title: "Bookmark Park", payload: obj.recareas[i].id}] });
+        }
+        
+          messageData = {
     "attachment":{
       "type":"template",
       "payload":{
         "template_type":"generic",
-        "elements":[
-          {
-            "title":"Marin Headlands",
-            "image_url":"http://www.donate.nationalparks.org/sites/default/files/styles/shared_photo_medium/public/9_0.jpeg?itok=GPU5p85P",
-            "subtitle":"5 miles away",
-            "buttons":[
-              {
-                "type":"web_url",
-                "url":"https://petersapparel.parseapp.com/view_item?item_id=100",
-                "title":"Go Now!"
-              },
-              {
-                "type":"web_url",
-                "url":"https://petersapparel.parseapp.com/buy_item?item_id=100",
-                "title":"Share"
-              },
-              {
-                "type":"postback",
-                "title":"Bookmark Park",
-                "payload":"USER_DEFINED_PAYLOAD_FOR_ITEM100"
-              }              
-            ]
-          },
-          {
-            "title":"Golden Gate",
-            "image_url":"http://i.huffpost.com/gen/1709434/images/o-GOLDEN-GATE-BRIDGE-facebook.jpg",
-            "subtitle":"10 miles away",
-            "buttons":[
-              {
-                "type":"web_url",
-                "url":"https://petersapparel.parseapp.com/view_item?item_id=101",
-                "title":"Go Now!"
-              },
-              {
-                "type":"web_url",
-                "url":"https://petersapparel.parseapp.com/buy_item?item_id=101",
-                "title":"Share"
-              },
-              {
-                "type":"postback",
-                "title":"Bookmark Park",
-                "payload":"USER_DEFINED_PAYLOAD_FOR_ITEM101"
-              }              
-            ]
-          }
-        ]
+        "elements": parks
       }
     }
   }
@@ -340,6 +302,8 @@ function sendParksMessage(sender) {
             console.log('Error: ', response.body.error)
         }
     })
+      }
+  });
 }
 
 function sendButtonMessage(sender, text, buttons) {
