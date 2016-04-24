@@ -103,9 +103,10 @@ app.post('/webhook/', function (req, res) {
                         col.deleteOne({ id : sender }, function(err, result) {
                           col.insertOne({id:sender, step:1}, function(err, r) {
                             sendActivityButtonMessage(sender, "What do you want to do?");
-                            return
+
                           });
                         });
+                        return;
                       } 
             col.findOne({id:sender}, function(err, doc) {
 
