@@ -146,7 +146,7 @@ app.post('/webhook/', function (req, res) {
                 } else {
 
                       
-                        col.insertOne({id:sender, step:1}, function(err, r) {
+                        col.update({id:sender}, { $set: { step:1}},{upsert: true}, function(err, r) {
                             if (event.message && event.message.text) {
                                 sendActivityButtonMessage(sender, "What do you want to do?");
                             }
