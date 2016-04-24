@@ -104,8 +104,8 @@ app.post('/webhook/', function (req, res) {
                     switch(doc.step) {
                         case 1:
                         
-                            var myActivity = JSON.parse(event.postback.payload);
-                            col.updateOne({id:sender},{ $set: { step : 2, activity: myActivity.value } }, function(err, r) {
+
+                            col.updateOne({id:sender},{ $set: { step : 2, activity: event.postback.payload } }, function(err, r) {
                                 if (event.postback && event.postback.payload) {
                                     sendTextMessage(sender, "Where are you?");
                                 }
@@ -129,8 +129,7 @@ app.post('/webhook/', function (req, res) {
                             break;
                         case 3:
                         
-                          var myTransit = JSON.parse(event.postback.payload);
-                          col.updateOne({id:sender},{ $set: { step : 3, transit: myTransit.value } }, function(err, r) {
+                          col.updateOne({id:sender},{ $set: { step : 3, transit: event.postback.payload } }, function(err, r) {
                                 if (event.postback && event.postback.payload) {
                                     sendParksMessage(sender);
                                 }
@@ -183,17 +182,17 @@ function sendActivityButtonMessage(sender) {
     {
       "type":"postback",
       "title":"Biking",
-      "payload":"{'value': 'Biking', 'step': 'activity'}"
+      "payload":"biking"
     },
     {
       "type":"postback",
       "title":"Hiking",
-      "payload":"{'value': 'Hiking', 'step': 'activity'}"
+      "payload":"hiking"
     },
     {
       "type":"postback",
       "title":"Swimming",
-      "payload":"{'value': 'Swimming', 'step': 'activity'}"
+      "payload":"swimming"
     }
   ];
   
@@ -205,17 +204,17 @@ function sendTransitButtonMessage(sender) {
     {
       "type": "postback",
       "title": "Car",
-      "payload": "{'value': 'driving', 'step': 'transportation'}"
+      "payload": "driving"
     },
     {
       "type": "postback",
       "title": "Transit",
-      "payload": "{'value': 'transit', 'step': 'transportation'}"
+      "payload": "transit"
     },
     {
     "type": "postback",
     "title": "Walk",
-    "payload": "{'value': 'walking', 'step': 'transportation'}"
+    "payload": "walking"
     }
   ];
   
