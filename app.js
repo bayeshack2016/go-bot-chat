@@ -268,7 +268,7 @@ function sendParksMessage(sender, doc) {
           for (var i = 0; i < obj.recareas.length; i++) {
             if (obj.recareas[i]) {
               console.log(obj.recareas[i]);
-              parks.push({title: obj.recareas[i].name, image_url: obj.recareas[i].image, subtitle: (obj.recareas[i].travel_time + ' ' + obj.recareas[i].distance + '\r\n' + obj.recareas[i].weather.summary + ' ' + obj.recareas[i].weather.temperature), buttons: [{type: 'web_url', title: "Go!", url: 'https://www.google.com/maps/dir/' +  encodeURIComponent(doc.location + '/' + obj.recareas[i].latitude + ',' + obj.recareas[i].longitude) },{type: 'web_url', title: "Share", url: 'http://google.com'},{type: "postback", title: "Bookmark Park", payload: obj.recareas[i].id}] });
+              parks.push({title: obj.recareas[i].name, image_url: obj.recareas[i].image, subtitle: (obj.recareas[i].travel_time + ' - ' + obj.recareas[i].distance + '\n' + obj.recareas[i].weather.summary + ' ' + obj.recareas[i].weather.temperature + ' degrees'), buttons: [{type: 'web_url', title: "Go!", url: 'https://www.google.com/maps/dir/' +  encodeURIComponent(doc.location + '/' + obj.recareas[i].latitude + ',' + obj.recareas[i].longitude) },{type: 'web_url', title: "Share", url: 'http://google.com'},{type: "postback", title: "Bookmark Park", payload: obj.recareas[i].id}] });
             }
           }
         
