@@ -144,23 +144,15 @@ app.post('/webhook/', function (req, res) {
                             sendActivityButtonMessage(sender, "What do you want to do?");
                     }
                 } else {
-                    if (event.message && event.message.text) {
-                      
-                      if (event.message.text.toLowerCase() === 'start over') {
-                        col.deleteOne({ id : sender }, function(err, result) {
-                          col.insertOne({id:sender, step:1}, function(err, r) {
-                            sendActivityButtonMessage(sender, "What do you want to do?");
-                          });
-                        });
-                      } else {
+
                       
                         col.insertOne({id:sender, step:1}, function(err, r) {
                             if (event.message && event.message.text) {
                                 sendActivityButtonMessage(sender, "What do you want to do?");
                             }
                         });
-                      }
-                    }
+                      
+                    
                 }
                 db.close();
             });
