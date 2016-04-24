@@ -113,7 +113,7 @@ app.post('/webhook/', function (req, res) {
                 if (doc) {
                     console.log(JSON.stringify(doc));
 
-            if (event.message && event.message.delivery && doc.step==4) {
+            if (messaging_events && messaging_events.delivery && doc.step==4) {
                        
 
        sendTextMessage(sender, "help?");
