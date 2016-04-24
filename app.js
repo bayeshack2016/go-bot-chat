@@ -261,45 +261,45 @@ function sendParksMessage(sender) {
         "template_type":"generic",
         "elements":[
           {
-            "title":"Classic White T-Shirt",
-            "image_url":"http://petersapparel.parseapp.com/img/item100-thumb.png",
-            "subtitle":"Soft white cotton t-shirt is back in style",
+            "title":"Marin Headlands",
+            "image_url":"https://marketplace.500px.com/photos/56428692/point-bonita-by-holger-eilhard",
+            "subtitle":"5 miles away",
             "buttons":[
               {
                 "type":"web_url",
                 "url":"https://petersapparel.parseapp.com/view_item?item_id=100",
-                "title":"View Item"
+                "title":"Go Now!"
               },
               {
                 "type":"web_url",
                 "url":"https://petersapparel.parseapp.com/buy_item?item_id=100",
-                "title":"Buy Item"
+                "title":"Share"
               },
               {
                 "type":"postback",
-                "title":"Bookmark Item",
+                "title":"Bookmark Park",
                 "payload":"USER_DEFINED_PAYLOAD_FOR_ITEM100"
               }              
             ]
           },
           {
-            "title":"Classic Grey T-Shirt",
-            "image_url":"http://petersapparel.parseapp.com/img/item101-thumb.png",
-            "subtitle":"Soft gray cotton t-shirt is back in style",
+            "title":"Golden Gate",
+            "image_url":"https://marketplace.500px.com/photos/68837817/golden-gate-by-federico-venuda",
+            "subtitle":"10 miles away",
             "buttons":[
               {
                 "type":"web_url",
                 "url":"https://petersapparel.parseapp.com/view_item?item_id=101",
-                "title":"View Item"
+                "title":"Go Now!"
               },
               {
                 "type":"web_url",
                 "url":"https://petersapparel.parseapp.com/buy_item?item_id=101",
-                "title":"Buy Item"
+                "title":"Share"
               },
               {
                 "type":"postback",
-                "title":"Bookmark Item",
+                "title":"Bookmark Park",
                 "payload":"USER_DEFINED_PAYLOAD_FOR_ITEM101"
               }              
             ]
