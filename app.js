@@ -100,10 +100,7 @@ app.post('/webhook/', function (req, res) {
         MongoClient.connect('mongodb://db_user:password@ds019101.mlab.com:19101/heroku_4kgl924v', function(err, db) {
             var col = db.collection('sessions');
             col.findOne({id:sender}, function(err, doc) {
-              if (event.message && event.message.text && event.message.text.toLowerCase() === 'start over') {
 
-                           delete doc;
-        }
                 if (doc) {
                     console.log(JSON.stringify(doc));
                     switch(doc.step) {
@@ -146,7 +143,7 @@ app.post('/webhook/', function (req, res) {
                 } else {
 
                       
-                        col.update({id:sender}, { $set: { step:1}},{upsert: true}, function(err, r) {
+                        col.insertOne({id:sender, step:1}, function(err, r) {
                             if (event.message && event.message.text) {
                                 sendActivityButtonMessage(sender, "What do you want to do?");
                             }
