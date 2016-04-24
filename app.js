@@ -122,7 +122,7 @@ app.post('/webhook/', function (req, res) {
                             }
                             
                             col.updateOne({id:sender},{ $set: { step : 3, location: myLocation } }, function(err, r) {
-                                if (event.message && event.message.text) {
+                                if (event.message && (event.message.text || event.message.attachments)) {
                                   sendTransitButtonMessage(sender);
                                 }
                             });
