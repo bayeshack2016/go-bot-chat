@@ -144,7 +144,7 @@ app.post('/webhook/', function (req, res) {
                 } else {
                     if (event.message && event.message.text) {
                       
-                      if (event.message.text.toLowerCase() == 'start over') {
+                      if (event.message.text.toLowerCase() === 'start over') {
                         col.deleteOne({ id : sender }, function(err, result) {
                           
                         });
@@ -152,7 +152,7 @@ app.post('/webhook/', function (req, res) {
                       
                         col.insertOne({id:sender, step:1}, function(err, r) {
                             if (event.message && event.message.text) {
-                                sendActivityButtonMessage(sender);
+                                sendActivityButtonMessage(sender, "What do you want to do?");
                             }
                         });
                       
@@ -188,7 +188,7 @@ function sendTextMessage(sender, text) {
     })
 }
 
-function sendActivityButtonMessage(sender) {
+function sendActivityButtonMessage(sender, text) {
   var buttons = [
     {
       "type":"postback",
@@ -207,7 +207,7 @@ function sendActivityButtonMessage(sender) {
     }
   ];
   
-  sendButtonMessage(sender, "What do you want to do?", buttons);
+  sendButtonMessage(sender, text, buttons);
 }
 
 function sendTransitButtonMessage(sender) {
@@ -290,7 +290,7 @@ function sendParksMessage(sender, doc) {
           var col = db.collection('sessions');
             
             col.deleteOne({ id : sender }, function(err, result) {
-              sendTextMessage(sender, "We couldn't find any parks that met your search criteria");
+              sendActivityButtonMessage(sender, "We couldn't find any parks that met your search criteria.  Let's try again.");
             });
           });
         }
