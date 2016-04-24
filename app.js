@@ -143,11 +143,19 @@ app.post('/webhook/', function (req, res) {
                     }
                 } else {
                     if (event.message && event.message.text) {
+                      
+                      if (event.message.text.toLower() == 'start over') {
+                        col.deleteOne({ id : sender }, function(err, result) {
+                          
+                        });
+                      }
+                      
                         col.insertOne({id:sender, step:1}, function(err, r) {
                             if (event.message && event.message.text) {
                                 sendActivityButtonMessage(sender);
                             }
                         });
+                      
                     }
                 }
                 db.close();
