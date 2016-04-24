@@ -103,22 +103,34 @@ app.post('/webhook/', function (req, res) {
                     console.log(JSON.stringify(doc));
                     switch(doc.step) {
                         case 1:
-                            col.updateOne({id:sender},{ $set: { step : 2 } }, function(err, r) {
+                        
+                            var myActivity = JSON.parse(event.postback.payload);
+                            col.updateOne({id:sender},{ $set: { step : 2, activity: myActivity.value } }, function(err, r) {
                                 if (event.postback && event.postback.payload) {
                                     sendTextMessage(sender, "Where are you?");
                                 }
                             });
                             break;
                         case 2:
+                            //parse location
+                            var myLocation = '';
                             
-                            col.updateOne({id:sender},{ $set: { step : 3 } }, function(err, r) {
+                            if (event.message && event.message.attachments) {
+                              myLocation = event.message.attachments[0].payload.coordinates.lat + ',' + event.message.attachments[0].payload.coordinates.long;
+                            } else {
+                              myLocation = event.message.text;
+                            }
+                            
+                            col.updateOne({id:sender},{ $set: { step : 3, location: myLocation } }, function(err, r) {
                                 if (event.message && event.message.text) {
                                   sendTransitButtonMessage(sender);
                                 }
                             });
                             break;
                         case 3:
-                          col.updateOne({id:sender},{ $set: { step : 3 } }, function(err, r) {
+                        
+                          var myTransit = JSON.parse(event.postback.payload);
+                          col.updateOne({id:sender},{ $set: { step : 3, transit: myTransit.value } }, function(err, r) {
                                 if (event.postback && event.postback.payload) {
                                     sendParksMessage(sender);
                                 }
@@ -221,17 +233,17 @@ function sendIntialMessage(sender) {
                   {
                     "type":"postback",
                     "title":"Biking",
-                    "payload":"Biking"
+                    "payload":"biking"
                   },
                   {
                     "type":"postback",
                     "title":"Hiking",
-                    "payload":"Hiking"
+                    "payload":"hiking"
                   },
                   {
                     "type":"postback",
                     "title":"Swimming",
-                    "payload":"Swimming"
+                    "payload":"swimming"
                   }
                 ]
           }
@@ -255,6 +267,11 @@ function sendIntialMessage(sender) {
 }
 
 function sendParksMessage(sender) {
+  
+  //request()
+  //https://go-bot-api.herokuapp.com/recommendations?activity_name=hiking&start_location=San%20Francisco&trans_mode=walking
+  //{ image: "url", name: "Some Park", id: 1213, distance: "200 miles", travel_time: "2:45", latitude: 123, longitude: 45}
+  
   messageData = {
     "attachment":{
       "type":"template",
