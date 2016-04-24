@@ -146,16 +146,16 @@ app.post('/webhook/', function (req, res) {
                       
                       if (event.message.text.toLowerCase() === 'start over') {
                         col.deleteOne({ id : sender }, function(err, result) {
-                          
+                          sendActivityButtonMessage(sender, "What do you want to do?");
                         });
-                      }
+                      } else {
                       
                         col.insertOne({id:sender, step:1}, function(err, r) {
                             if (event.message && event.message.text) {
                                 sendActivityButtonMessage(sender, "What do you want to do?");
                             }
                         });
-                      
+                      }
                     }
                 }
                 db.close();
