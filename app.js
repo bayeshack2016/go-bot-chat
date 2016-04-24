@@ -128,7 +128,7 @@ app.post('/webhook/', function (req, res) {
                             if (event.message && event.message.attachments) {
                               myLocation = event.message.attachments[0].payload.coordinates.lat + ',' + event.message.attachments[0].payload.coordinates.long;
                             } else {
-                              myLocation = encodeUriComponent(event.message.text);
+                              myLocation = encodeURIComponent(event.message.text);
                             }
                             
                             col.updateOne({id:sender},{ $set: { step : 3, location: myLocation } }, function(err, r) {
@@ -149,14 +149,15 @@ app.post('/webhook/', function (req, res) {
                             });
                             break;
                         case 4:
-                          col.updateOne({id:sender},{ $set: { step : 4, transit: event.postback.payload } }, function(err, r) {
-                                if (event.postback && event.postback.payload) {
+                          if (event.postback && event.postback.payload) {
+                            col.updateOne({id:sender},{ $set: { step : 4, transit: event.postback.payload } }, function(err, r) {
+
+                                    //get session obj
+                                    doc.transit = event.postback.payload;
+                                      sendParksMessage(sender, doc);
                                   
-                                  //get session obj
-                                  doc.transit = event.postback.payload;
-                                    sendParksMessage(sender, doc);
-                                }
-                            });
+                              });
+                            }
                             break;
                         default:
                             sendActivityButtonMessage(sender, "What do you want to do?");
