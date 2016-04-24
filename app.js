@@ -88,8 +88,6 @@ app.get('/webhook/', function (req, res) {
 
 app.post('/webhook/', function (req, res) {
     messaging_events = req.body.entry[0].messaging
-    
-                    console.log("messaging_events="+JSON.stringify(messaging_events));
     for (i = 0; i < messaging_events.length; i++) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
@@ -115,15 +113,6 @@ app.post('/webhook/', function (req, res) {
                 if (doc) {
                     console.log(JSON.stringify(doc));
 
-                    console.log("messaging_events="+messaging_events);
-                    console.log("doc="+doc.step);
-                    console.log(JSON.stringify(doc));
-            if (messaging_events && messaging_events.delivery && doc.step==4) {
-                       
-
-       sendTextMessage(sender, "help?");
-                        return;
-                      } 
                     switch(doc.step) {
                         case 1:
                             col.updateOne({id:sender},{ $set: { step : 2, activity: event.postback.payload } }, function(err, r) {
