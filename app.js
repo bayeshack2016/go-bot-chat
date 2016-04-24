@@ -99,6 +99,13 @@ app.post('/webhook/', function (req, res) {
         
         MongoClient.connect('mongodb://db_user:password@ds019101.mlab.com:19101/heroku_4kgl924v', function(err, db) {
             var col = db.collection('sessions');
+            if (event.message && event.message.text && event.message.text.toLowerCase() === 'start over') {
+                        col.deleteOne({ id : sender }, function(err, result) {
+                          col.insertOne({id:sender, step:1}, function(err, r) {
+                            sendActivityButtonMessage(sender, "What do you want to do?");
+                          });
+                        });
+                      } 
             col.findOne({id:sender}, function(err, doc) {
 
                 if (doc) {
