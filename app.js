@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 var PAGE_ACCESS_TOKEN = 'CAAbDDNjq7MgBAIl5VLzC23NrA9WFDy9TA12cE0WrQ2IvBlGvl1EfIJng5hE4c8g0EzFWZClEZAIAAj8tVpMEfxdX1NEvZA8ZA22nC58W4o138F8GqaybXzAsIS6I0ZA07vH9PkqZBdVZAZArkjWdU5vHMeZAJ9l4CGLbWf9oEG3oZADZAMNkCxFUDeBfRTSLI6QdJVpZBIo02qAz9gZDZD';
 var VERIFY_TOKEN = 'go_bot_verify_me';
 
-//Mongo - mongodb://<dbuser>:<dbpassword>@ds019101.mlab.com:19101/heroku_4kgl924v
+//Mongo - mongodb://<dbuser>:<dbpassword>@ds051893.mlab.com:51893/heroku_4sc5w92c
 var MONGO_DB = 'heroku_4kgl924v';
 var MONGO_USER = 'db_user';
 var MONGO_PASSWORD = 'password';
@@ -36,7 +36,7 @@ app.get('/', function(req, res){
 
 app.get('/db', function(req, res) {
   
-  MongoClient.connect('mongodb://db_user:password@ds019101.mlab.com:19101/heroku_4kgl924v', function(err, db) {
+  MongoClient.connect('mongodb://db_user:password@ds051893.mlab.com:51893/heroku_4sc5w92c', function(err, db) {
     var col = db.collection('sessions');
     col.insertOne({id:1}, function(err, r) {
         res.send("doc");
@@ -46,7 +46,7 @@ app.get('/db', function(req, res) {
 });
 
 app.get('/clear', function(req, res) {
-  MongoClient.connect('mongodb://db_user:password@ds019101.mlab.com:19101/heroku_4kgl924v', function(err, db) {
+  MongoClient.connect('mongodb://db_user:password@ds051893.mlab.com:51893/heroku_4sc5w92c', function(err, db) {
     var col = db.collection('sessions');
     col.drop()
     db.close();
@@ -97,7 +97,7 @@ app.post('/webhook/', function (req, res) {
         }
         console.log(JSON.stringify(messaging_events));
         
-        MongoClient.connect('mongodb://db_user:password@ds019101.mlab.com:19101/heroku_4kgl924v', function(err, db) {
+        MongoClient.connect('mongodb://db_user:password@ds051893.mlab.com:51893/heroku_4sc5w92c', function(err, db) {
             var col = db.collection('sessions');
             if (event.message && event.message.text && event.message.text.toLowerCase() === 'start over') {
                         col.deleteOne({ id : sender }, function(err, result) {
@@ -256,7 +256,7 @@ function sendParksMessage(sender, doc) {
         
         //we have no data
         if (obj.recareas.length == 0) {
-          MongoClient.connect('mongodb://db_user:password@ds019101.mlab.com:19101/heroku_4kgl924v', function(err, db) {
+          MongoClient.connect('mongodb://db_user:password@ds051893.mlab.com:51893/heroku_4sc5w92c', function(err, db) {
           var col = db.collection('sessions');
             
             col.deleteOne({ id : sender }, function(err, result) {
