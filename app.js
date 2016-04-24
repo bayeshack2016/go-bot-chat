@@ -272,13 +272,16 @@ function sendParksMessage(sender, doc) {
   
   request('https://go-bot-api.herokuapp.com/recommendations?activity_name=' + doc.activity + '&start_location=' + doc.location + '&trans_mode=' + doc.transit, function(error, response, body){
       if (!error && response.statusCode == 200) {
-        var obj = body;//JSON.parse(body);
+        var obj = JSON.parse(body);
         
         console.log(obj);
         var parks = [];
         for (var i = 0; i < 3; i++) {
-          if (obj.recareas[i])
-          parks.push({title: obj.recareas[i].name, image_url: obj.recareas[i].image, subtitle: obj.recareas[i].distance, buttons: [{type: "postback", title: "Bookmark Park", payload: obj.recareas[i].id}] });
+          if (obj.recareas[i]) {
+            var park = JSON.parse(obj.recareas[i]);
+            console.log(park);
+            parks.push({title: obj.recareas[i].name, image_url: obj.recareas[i].image, subtitle: obj.recareas[i].distance, buttons: [{type: "postback", title: "Bookmark Park", payload: obj.recareas[i].id}] });
+          }
         }
         
         
@@ -293,7 +296,7 @@ function sendParksMessage(sender, doc) {
     }
   }
   
-  console.log(messageData);
+  console.log(JSON.stringify(messageData));
   
   request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
