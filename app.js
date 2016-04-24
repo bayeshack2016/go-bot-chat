@@ -95,7 +95,7 @@ app.post('/webhook/', function (req, res) {
           res.sendStatus(200);
           return;
         }
-        console.log(JSON.stringify(req));
+        console.log(JSON.stringify(messaging_events));
         MongoClient.connect('mongodb://db_user:password@ds019101.mlab.com:19101/heroku_4kgl924v', function(err, db) {
             var col = db.collection('sessions');
             col.findOne({id:sender}, function(err, doc) {
@@ -193,17 +193,17 @@ function sendTransitButtonMessage(sender) {
     {
       "type": "postback",
       "title": "Car",
-      "payload": "{'value': 'Car', 'step': 'transportation'}"
+      "payload": "{'value': 'driving', 'step': 'transportation'}"
     },
     {
       "type": "postback",
       "title": "Transit",
-      "payload": "{'value': 'Transit', 'step': 'transportation'}"
+      "payload": "{'value': 'transit', 'step': 'transportation'}"
     },
     {
     "type": "postback",
     "title": "Walk",
-    "payload": "{'value': 'Walk', 'step': 'transportation'}"
+    "payload": "{'value': 'walking', 'step': 'transportation'}"
     }
   ];
   
