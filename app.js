@@ -112,6 +112,13 @@ app.post('/webhook/', function (req, res) {
 
                 if (doc) {
                     console.log(JSON.stringify(doc));
+
+            if (event.message && event.message.delivery && doc.step==4) {
+                       
+
+       sendTextMessage(sender, "help?");
+                        return;
+                      } 
                     switch(doc.step) {
                         case 1:
                             col.updateOne({id:sender},{ $set: { step : 2, activity: event.postback.payload } }, function(err, r) {
@@ -298,8 +305,6 @@ function sendParksMessage(sender, doc) {
             console.log('Error: ', response.body.error)
         }
     })
-
-       sendTextMessage(sender, "help?");
       }
   });
 }
