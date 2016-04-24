@@ -278,7 +278,12 @@ function sendParksMessage(sender, doc) {
         
         //we have no data
         if (obj.recareas.length == 0) {
-          sendTextMessage(sender, "We couldn't find any parks that met your search criteria");
+          MongoClient.connect('mongodb://db_user:password@ds019101.mlab.com:19101/heroku_4kgl924v', function(err, db) {
+          var col = db.collection('sessions');
+            
+            col.deleteOne({ id : sender }, function(err, result) {
+              sendTextMessage(sender, "We couldn't find any parks that met your search criteria");
+            });
         }
           var parks = [];
           for (var i = 0; i < obj.recareas.length; i++) {
