@@ -279,7 +279,7 @@ function sendParksMessage(sender, doc) {
         for (var i = 0; i < 3; i++) {
           if (obj.recareas[i]) {
             //var park = JSON.parse(obj.recareas[i]);
-            console.log(obj.recareas[i].name);
+            console.log(obj.recareas[i]);
             parks.push({title: obj.recareas[i].name, image_url: obj.recareas[i].image, subtitle: obj.recareas[i].distance, buttons: [{type: "postback", title: "Bookmark Park", payload: obj.recareas[i].id}] });
           }
         }
