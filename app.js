@@ -279,7 +279,7 @@ function sendParksMessage(sender, doc) {
         for (var i = 0; i < obj.recareas.length; i++) {
           if (obj.recareas[i]) {
             console.log(obj.recareas[i]);
-            parks.push({title: obj.recareas[i].name, image_url: obj.recareas[i].image, subtitle: (obj.recareas[i].travel_time + ' ' + obj.recareas[i].distance), buttons: [{type: 'web_url', title: "Go!", url: ''},{type: 'web_url', title: "Share", url: ''},{type: "postback", title: "Bookmark Park", payload: obj.recareas[i].id}] });
+            parks.push({title: obj.recareas[i].name, image_url: obj.recareas[i].image, subtitle: (obj.recareas[i].travel_time + ' ' + obj.recareas[i].distance), buttons: [{type: 'web_url', title: "Go!", url: 'http://google.com'},{type: 'web_url', title: "Share", url: 'http://google.com'},{type: "postback", title: "Bookmark Park", payload: obj.recareas[i].id}] });
           }
         }
         
