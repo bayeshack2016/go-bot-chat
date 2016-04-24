@@ -128,7 +128,7 @@ app.post('/webhook/', function (req, res) {
                             if (event.message && event.message.attachments) {
                               myLocation = event.message.attachments[0].payload.coordinates.lat + ',' + event.message.attachments[0].payload.coordinates.long;
                             } else {
-                              myLocation = event.message.text;
+                              myLocation = encodeUriComponent(event.message.text);
                             }
                             
                             col.updateOne({id:sender},{ $set: { step : 3, location: myLocation } }, function(err, r) {
@@ -268,7 +268,7 @@ function sendParksMessage(sender, doc) {
           for (var i = 0; i < obj.recareas.length; i++) {
             if (obj.recareas[i]) {
               console.log(obj.recareas[i]);
-              parks.push({title: obj.recareas[i].name, image_url: obj.recareas[i].image, subtitle: "You're " + obj.recareas[i].travel_time + " away (" + obj.recareas[i].distance + "). The weather is " + obj.recareas[i].weather.summary.toLowerCase() + " " + Math.round(obj.recareas[i].weather.temperature) + " F.", buttons: [{type: 'web_url', title: "Go!", url: 'https://www.google.com/maps/dir/' +  encodeURIComponent(doc.location + '/' + obj.recareas[i].latitude + ',' + obj.recareas[i].longitude) },{type: 'web_url', title: "Share", url: 'http://google.com'},{type: "postback", title: "Bookmark Park", payload: obj.recareas[i].id}] });
+              parks.push({title: obj.recareas[i].name, image_url: obj.recareas[i].image, subtitle: "You're " + obj.recareas[i].travel_time + " away (" + obj.recareas[i].distance + "). The weather is " + obj.recareas[i].weather.summary.toLowerCase() + " " + Math.round(obj.recareas[i].weather.temperature) + " F.", buttons: [{type: 'web_url', title: "Go!", url: 'https://www.google.com/maps/dir/' +  doc.location + '/' + obj.recareas[i].latitude + ',' + obj.recareas[i].longitude },{type: 'web_url', title: "Share", url: 'http://google.com'},{type: "postback", title: "Bookmark Park", payload: obj.recareas[i].id}] });
             }
           }
         
