@@ -95,6 +95,7 @@ app.post('/webhook/', function (req, res) {
           res.sendStatus(200);
           return;
         }
+        console.log(JSON.stringify(req));
         MongoClient.connect('mongodb://db_user:password@ds019101.mlab.com:19101/heroku_4kgl924v', function(err, db) {
             var col = db.collection('sessions');
             col.findOne({id:sender}, function(err, doc) {
