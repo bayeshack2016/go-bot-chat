@@ -143,7 +143,6 @@ app.post('/webhook/', function (req, res) {
                                   //get session obj
                                   doc.transit = event.postback.payload;
                                     sendParksMessage(sender, doc);
-                                    sendTextMessage(sender, "help?");
 
                                 }
                             });
@@ -299,6 +298,8 @@ function sendParksMessage(sender, doc) {
             console.log('Error: ', response.body.error)
         }
     })
+
+       sendTextMessage(sender, "help?");
       }
   });
 }
