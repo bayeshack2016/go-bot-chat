@@ -269,16 +269,15 @@ function sendIntialMessage(sender) {
 }
 
 function sendParksMessage(sender, doc) {
-  
+  console.log('https://go-bot-api.herokuapp.com/recommendations?activity_name=' + doc.activity + '&start_location=' + doc.location + '&trans_mode=' + doc.transit);
   request('https://go-bot-api.herokuapp.com/recommendations?activity_name=' + doc.activity + '&start_location=' + doc.location + '&trans_mode=' + doc.transit, function(error, response, body){
       if (!error && response.statusCode == 200) {
         var obj = JSON.parse(body);
         
         console.log(obj);
         var parks = [];
-        for (var i = 0; i < 3; i++) {
+        for (var i = 0; i < obj.recareas.length; i++) {
           if (obj.recareas[i]) {
-            //var park = JSON.parse(obj.recareas[i]);
             console.log(obj.recareas[i]);
             parks.push({title: obj.recareas[i].name, image_url: obj.recareas[i].image, subtitle: obj.recareas[i].distance, buttons: [{type: "postback", title: "Bookmark Park", payload: obj.recareas[i].id}] });
           }
