@@ -102,7 +102,7 @@ app.post('/webhook/', function (req, res) {
             col.findOne({id:sender}, function(err, doc) {
               if (event.message && event.message.text && event.message.text.toLowerCase() === 'start over') {
 
-                            doc = null;
+                           delete doc;
         }
                 if (doc) {
                     console.log(JSON.stringify(doc));
