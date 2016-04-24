@@ -284,6 +284,7 @@ function sendParksMessage(sender, doc) {
             col.deleteOne({ id : sender }, function(err, result) {
               sendTextMessage(sender, "We couldn't find any parks that met your search criteria");
             });
+          });
         }
           var parks = [];
           for (var i = 0; i < obj.recareas.length; i++) {
