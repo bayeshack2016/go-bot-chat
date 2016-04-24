@@ -272,7 +272,7 @@ function sendParksMessage(sender, doc) {
   
   request('https://go-bot-api.herokuapp.com/recommendations?activity_name=' + doc.activity + '&start_location=' + doc.location + '&trans_mode=' + doc.transit, function(error, response, body){
       if (!error && response.statusCode == 200) {
-        var obj = JSON.parse(body);
+        var obj = body;//JSON.parse(body);
         
         console.log(obj);
         var parks = [];
