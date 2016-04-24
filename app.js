@@ -113,6 +113,9 @@ app.post('/webhook/', function (req, res) {
                 if (doc) {
                     console.log(JSON.stringify(doc));
 
+                    console.log("messaging_events="+messaging_events);
+                    console.log("doc="+doc.step);
+                    console.log(JSON.stringify(doc));
             if (messaging_events && messaging_events.delivery && doc.step==4) {
                        
 
