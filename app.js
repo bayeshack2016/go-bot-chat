@@ -137,7 +137,19 @@ app.post('/webhook/', function (req, res) {
                             });
                             break;
                         case 3:
-                          col.updateOne({id:sender},{ $set: { step : 3, transit: event.postback.payload } }, function(err, r) {
+                          col.updateOne({id:sender},{ $set: { step : 4, transit: event.postback.payload } }, function(err, r) {
+                                if (event.postback && event.postback.payload) {
+                                  
+                                  //get session obj
+                                  doc.transit = event.postback.payload;
+                                    sendParksMessage(sender, doc);
+                                    sendTextMessage(sender, "help?");
+
+                                }
+                            });
+                            break;
+                        case 4:
+                          col.updateOne({id:sender},{ $set: { step : 4, transit: event.postback.payload } }, function(err, r) {
                                 if (event.postback && event.postback.payload) {
                                   
                                   //get session obj
