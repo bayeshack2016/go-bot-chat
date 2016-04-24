@@ -143,7 +143,9 @@ app.post('/webhook/', function (req, res) {
                       
                       if (event.message.text.toLowerCase() === 'start over') {
                         col.deleteOne({ id : sender }, function(err, result) {
+                          col.insertOne({id:sender, step:1}, function(err, r) {
                           sendActivityButtonMessage(sender, "What do you want to do?");
+                          });
                         });
                       } else {
                       
@@ -227,50 +229,6 @@ function sendTransitButtonMessage(sender) {
   ];
   
   sendButtonMessage(sender, "How are you getting there?", buttons);
-}
-
-function sendIntialMessage(sender) {
-    messageData = {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type":"button",
-                "text":"What do you want to do?",
-                "buttons":[
-                  {
-                    "type":"postback",
-                    "title":"Biking",
-                    "payload":"biking"
-                  },
-                  {
-                    "type":"postback",
-                    "title":"Hiking",
-                    "payload":"hiking"
-                  },
-                  {
-                    "type":"postback",
-                    "title":"Swimming",
-                    "payload":"swimming"
-                  }
-                ]
-          }
-        }
-    }
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:PAGE_ACCESS_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
 }
 
 function sendParksMessage(sender, doc) {
