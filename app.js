@@ -276,7 +276,8 @@ function sendParksMessage(sender, doc) {
         
         console.log(obj);
         var parks = [];
-        for (var i = 0; i < (obj.recareas.length > 3) ? 3 : obj.recareas.length; i++) {
+        for (var i = 0; i < 3; i++) {
+          if (obj.recareas[i])
           parks.push({title: obj.recareas[i].name, image_url: obj.recareas[i].image, subtitle: obj.recareas[i].distance, buttons: [{type: "postback", title: "Bookmark Park", payload: obj.recareas[i].id}] });
         }
         
