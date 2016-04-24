@@ -262,7 +262,7 @@ function sendParksMessage(sender) {
         "elements":[
           {
             "title":"Marin Headlands",
-            "image_url":"https://marketplace.500px.com/photos/56428692/point-bonita-by-holger-eilhard",
+            "image_url":"http://www.donate.nationalparks.org/sites/default/files/styles/shared_photo_medium/public/9_0.jpeg?itok=GPU5p85P",
             "subtitle":"5 miles away",
             "buttons":[
               {
@@ -284,7 +284,7 @@ function sendParksMessage(sender) {
           },
           {
             "title":"Golden Gate",
-            "image_url":"https://marketplace.500px.com/photos/68837817/golden-gate-by-federico-venuda",
+            "image_url":"http://i.huffpost.com/gen/1709434/images/o-GOLDEN-GATE-BRIDGE-facebook.jpg",
             "subtitle":"10 miles away",
             "buttons":[
               {
