@@ -137,6 +137,7 @@ app.post('/webhook/', function (req, res) {
                       
                     
                 }
+                db.close();
                             });
     }
     res.sendStatus(200)
