@@ -13,8 +13,8 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 //FB settings
-var PAGE_ACCESS_TOKEN = 'CAAbDDNjq7MgBAIl5VLzC23NrA9WFDy9TA12cE0WrQ2IvBlGvl1EfIJng5hE4c8g0EzFWZClEZAIAAj8tVpMEfxdX1NEvZA8ZA22nC58W4o138F8GqaybXzAsIS6I0ZA07vH9PkqZBdVZAZArkjWdU5vHMeZAJ9l4CGLbWf9oEG3oZADZAMNkCxFUDeBfRTSLI6QdJVpZBIo02qAz9gZDZD';
-var VERIFY_TOKEN = 'go_bot_verify_me';
+var PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
+var VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
 //Mongo - mongodb://<dbuser>:<dbpassword>@ds051893.mlab.com:51893/heroku_4sc5w92c
 var MONGO_DB = 'heroku_4kgl924v';
