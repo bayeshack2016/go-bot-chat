@@ -12,37 +12,24 @@ app.use(bodyParser.urlencoded({extended: false}));
 // Process application/json
 app.use(bodyParser.json());
 
-//FB settings
+// FB settings
 var PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 var VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
-//Mongo - mongodb://<dbuser>:<dbpassword>@ds051893.mlab.com:51893/heroku_4sc5w92c
-var MONGO_DB = 'heroku_4kgl924v';
-var MONGO_USER = 'db_user';
-var MONGO_PASSWORD = 'password';
+// Mongo 
+var MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING;
 
 var MongoClient = require('mongodb').MongoClient;
-
 //API
+
 var API_URL = 'https://go-bot-api.herokuapp.com/';
 
 app.get('/', function(req, res){
     res.send('Go Bot');
 });
 
-app.get('/db', function(req, res) {
-  
-  MongoClient.connect('mongodb://db_user:password@ds051893.mlab.com:51893/heroku_4sc5w92c', function(err, db) {
-    var col = db.collection('sessions');
-    col.insertOne({id:1}, function(err, r) {
-        res.send("doc");
-      db.close();
-  });
-});
-});
-
 app.get('/clear', function(req, res) {
-  MongoClient.connect('mongodb://db_user:password@ds051893.mlab.com:51893/heroku_4sc5w92c', function(err, db) {
+  MongoClient.connect(MONGO_CONNECTION_STRING, function(err, db) {
     var col = db.collection('sessions');
     col.drop()
     db.close();
@@ -78,7 +65,7 @@ app.post('/webhook/', function (req, res) {
         }
         console.log(JSON.stringify(messaging_events));
         
-        MongoClient.connect('mongodb://db_user:password@ds051893.mlab.com:51893/heroku_4sc5w92c', function(err, db) {
+        MongoClient.connect(MONGO_CONNECTION_STRING, function(err, db) {
             var col = db.collection('sessions');
             if (event.message && event.message.text && event.message.text.toLowerCase() === 'start over') {
                         col.deleteOne({ id : sender }, function(err, result) {
@@ -238,7 +225,7 @@ function sendParksMessage(sender, doc) {
         
         //we have no data
         if (obj.recareas.length == 0) {
-          MongoClient.connect('mongodb://db_user:password@ds051893.mlab.com:51893/heroku_4sc5w92c', function(err, db) {
+          MongoClient.connect(MONGO_CONNECTION_STRING, function(err, db) {
           var col = db.collection('sessions');
             
             col.deleteOne({ id : sender }, function(err, result) {
