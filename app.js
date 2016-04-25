@@ -295,3 +295,5 @@ function sendButtonMessage(sender, text, buttons) {
 app.listen(app.get('port'), function() {
     console.log('running on port', app.get('port'))
 });
+
+module.exports = router;
