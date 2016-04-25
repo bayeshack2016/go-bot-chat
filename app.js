@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
+var expressMongoDb = require('express-mongo-db');
 
 var app = new express();
 
@@ -18,10 +19,9 @@ var VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
 // Mongo 
 var MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING;
+app.use(MONGO_CONNECTION_STRING);
 
-var MongoClient = require('mongodb').MongoClient;
 //API
-
 var API_URL = 'https://go-bot-api.herokuapp.com/';
 
 app.get('/', function(req, res){
@@ -29,12 +29,9 @@ app.get('/', function(req, res){
 });
 
 app.get('/clear', function(req, res) {
-  MongoClient.connect(MONGO_CONNECTION_STRING, function(err, db) {
-    var col = db.collection('sessions');
+    var col = req.db.collection('sessions');
     col.drop()
-    db.close();
     res.send('clear');
-  });
 });
 
 app.get('/api', function(req, res){
@@ -65,8 +62,7 @@ app.post('/webhook/', function (req, res) {
         }
         console.log(JSON.stringify(messaging_events));
         
-        MongoClient.connect(MONGO_CONNECTION_STRING, function(err, db) {
-            var col = db.collection('sessions');
+            var col = req.db.collection('sessions');
             if (event.message && event.message.text && event.message.text.toLowerCase() === 'start over') {
                         col.deleteOne({ id : sender }, function(err, result) {
                           col.insertOne({id:sender, step:1}, function(err, r) {
@@ -141,10 +137,7 @@ app.post('/webhook/', function (req, res) {
                       
                     
                 }
-                db.close();
-            });
-
-        });
+                            });
     }
     res.sendStatus(200)
 });
@@ -225,13 +218,11 @@ function sendParksMessage(sender, doc) {
         
         //we have no data
         if (obj.recareas.length == 0) {
-          MongoClient.connect(MONGO_CONNECTION_STRING, function(err, db) {
-          var col = db.collection('sessions');
+          var col = req.db.collection('sessions');
             
             col.deleteOne({ id : sender }, function(err, result) {
               sendActivityButtonMessage(sender, "We couldn't find any parks that met your search criteria.  Let's try again.");
             });
-          });
         }
           var parks = [];
           for (var i = 0; i < obj.recareas.length; i++) {
