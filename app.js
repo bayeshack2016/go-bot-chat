@@ -19,7 +19,7 @@ var VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
 // Mongo 
 var MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING;
-app.use(MONGO_CONNECTION_STRING);
+app.use(expressMongoDb(MONGO_CONNECTION_STRING));
 
 //API
 var API_URL = 'https://go-bot-api.herokuapp.com/';
@@ -295,5 +295,3 @@ function sendButtonMessage(sender, text, buttons) {
 app.listen(app.get('port'), function() {
     console.log('running on port', app.get('port'))
 });
-
-module.exports = router;
