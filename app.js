@@ -26,10 +26,6 @@ var MongoClient = require('mongodb').MongoClient;
 //API
 var API_URL = 'https://go-bot-api.herokuapp.com/';
 
-//Weather
-var WEATHER_API_KEY = '16acf95c142f6e5cc451e78523aa78b9';
-var WEATHER_API_URL = 'https://api.forecast.io/forecast/';
-
 app.get('/', function(req, res){
     res.send('Go Bot');
 });
@@ -53,21 +49,6 @@ app.get('/clear', function(req, res) {
     res.send('clear');
   });
 });
-
-app.get('/weather', function(req, res) {
-  handleWeatherRequest(37.7751648,-122.3986424, function(data){
-    res.send(data);
-  });
-});
-
-
-function handleWeatherRequest(lat, lon, callback) {
-  request.get(WEATHER_API_URL + WEATHER_API_KEY + '/' + lat + ',' + lon, function(error, response, body) {
-    if (!error && response.statusCode == 200) {
-      callback(body);
-    }
-  });
-}
 
 app.get('/api', function(req, res){
   request.get(API_URL, function (error, response, body) {
