@@ -199,7 +199,7 @@ function sendTextMessage(sender, text) {
 function sendActivityButtonMessage(sender, text) {
     var buttons = [{
         "type": "postback",
-        "title": "Biking 😀",
+        "title": "Biking",
         "payload": "biking"
     }, {
         "type": "postback",
