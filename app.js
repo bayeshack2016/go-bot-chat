@@ -91,7 +91,7 @@ app.post('/webhook/', function(req, res) {
                         case 1:
                             col.updateOne({ id: sender }, { $set: { step: 2, activity: event.postback.payload } }, function(err, r) {
                                 if (event.postback && event.postback.payload) {
-                                    sendTextMessage(sender, `Sounds fun 😀. ${emojiActivityMap[event.postback.payload]} Where are you?`);
+                                    sendLocationMessage(sender, `Sounds fun 😀. ${emojiActivityMap[event.postback.payload]} Where are you?`);
                                 }
                             });
                             break;
@@ -185,6 +185,30 @@ function sendTextMessage(sender, text) {
         json: {
             recipient: { id: sender },
             message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+    sendTypingIndicator(sender)
+}
+
+function sendLocationMessage(sender, text) {
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: { access_token: PAGE_ACCESS_TOKEN },
+        method: 'POST',
+        json: {
+            recipient: { id: sender },
+            "message": {
+                "text": text,
+                "quick_replies": [{
+                    "content_type": "location",
+                }]
+            },
         }
     }, function(error, response, body) {
         if (error) {
